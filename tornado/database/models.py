@@ -5,6 +5,11 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import sessionmaker
 import enum
 import os
+import datetime
+import requests
+import logging
+
+
 
 def get_dburi():
     db_password = os.environ.get('POSTGRES_PASSWORD')
@@ -21,6 +26,8 @@ def get_session():
 
 Base = declarative_base()
 TEST_CASE = True
+
+
 
 class conditions(Base):
 
@@ -55,12 +62,27 @@ class HAS_MOTION(enum.Enum):
 
 class LazyLoader:
     
-    def get_day(self, date):
-        midnight = date.replace(hour=0, minute=0, second=0, microsecond=0)
-        next_midnight = midnight + timedelta(days=1)
-        session = get_session()()
-        query = session.query(self).filter(and_(self.timestamp*1000 >= midnight.timestamp(), self.timestamp*1000 < next_midnight.timestamp()))
-        return query
+        
+    @classmethod
+    def clean_data(cls, row):
+        """Handle special data types
+
+        Parameters
+        ----------
+        row : dict
+            A dictionary of row data from the database
+
+        Returns
+        -------
+        dict
+            The cleaned row data
+        """
+        
+        if 'hasTurtle' in row:
+            row['hasTurtle'] = HAS_TURTLE(row['hasTurtle']['value'])
+            
+        return row
+    
         
 
 class images(Base):
@@ -164,7 +186,55 @@ class cassini_orientation(Base):
     y2 = Column(Float)
     
     orientation = Column(Integer)
+
+class Loader:
     
+    def __init__(self, table, data):
+        
+        self.table = table
+        self.data = data
+
+    def load(self):
+        
+        session = get_session()()
+        db_process_ = db_process()
+        db_process_.process_name = "load"
+        db_process_.status = "start"
+        db_process_.table_name = self.table.__tablename__
+        db_process_.data_time = self.data[0]['timestamp']
+        db_process_.data_length = len(self.data)
+        db_process_.processed_rows = 0
+        session.add(db_process_)
+        session.commit()
+        length = len(self.data)
+        new_rows = []
+        for ii, row in enumerate(self.data):
+            new_rows.append(self.table(**self.table.clean_data(row)))
+            if ii % 100 == 0:
+                db_process_.processed_rows = ii
+                session.add_all(new_rows)
+                session.commit()
+                new_rows = []
+                
+        session.add_all(new_rows)
+        db_process_.processed_rows = length
+        db_process_.status = "complete"
+        session.add(db_process_)
+        session.commit()
+        session.close()
+
+class db_process(Base):
+    
+    __tablename__="db_process"
+    timestamp = Column(BigInteger, primary_key=True)
+    process_name = Column(String(128))
+    status = Column(String(128))
+    message = Column(String(512))
+    table_name = Column(String(128))
+    data_time = Column(BigInteger)
+    data_length = Column(Integer)
+    processed_rows = Column(Integer)
+  
 def recreate():
     md = Base.metadata
     s = get_session()()
