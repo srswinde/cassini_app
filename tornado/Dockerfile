@@ -9,6 +9,6 @@ COPY requirements.txt /usr/src/app
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
+env PYTHONPATH=/usr/src/app
 # Run the application
 ENTRYPOINT ["python", "app.py"]
