@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cassini-app
+  name: cassini-app
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: cassini-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cassini-app
+    spec:
+      containers:
+      - image: registry.digitalocean.com/cassini/tornado-app:latest
+        imagePullPolicy: Always
+        name: tornado-app
+        env:
+        - name: POSTGRES_USER
+          value: admin
+        - name: POSTGRES_DB
+          value: cassini
+        - name: POSTGRES_HOST
+          value: postgres.database.svc.cluster.local
+        - name: POSTGRES_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2025-02-03T23:12:44Z"
+    lastUpdateTime: "2025-02-03T23:12:44Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2025-02-03T23:12:03Z"
+    lastUpdateTime: "2025-02-03T23:12:44Z"
+    message: ReplicaSet "my-python-app-68ddd59d86" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

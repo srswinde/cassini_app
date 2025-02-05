@@ -1,9 +1,12 @@
 import tornado.ioloop
 import tornado.web
+import base64
+import os
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        name =  os.environ.get('POSTGRES_DB')
+        self.write(f"Hello, world {name}!")
 
 def make_app():
     return tornado.web.Application([
