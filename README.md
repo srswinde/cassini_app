@@ -12,7 +12,7 @@ This app is an attempt to migrate some of his website to a kubernetes cluster th
 
 ## App Description
 
-This web application runs on a kubernetes cluster hosted by Digital Ocean. It leverages three nodes in a worker pool to host the database and the python api. It uses lazy loading and a process server to pull the cassini images from his website and store them in a database managed by a kubernetes cluster. The application has a web interface at [cassini.scottswindell.net](cassini.scottswindell.net)
+This web application runs on a kubernetes cluster hosted by Digital Ocean. It leverages three nodes in a worker pool to host the database and the python api. It uses lazy loading and a process server to pull the cassini images from his website and store them in a database managed by a kubernetes cluster. The application has a web interface at [http://cassini.scottswindell.net](http://cassini.scottswindell.net)
 
 ## Postgres Database
 

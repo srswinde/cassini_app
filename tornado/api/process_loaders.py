@@ -85,11 +85,11 @@ def get_day(table, date):
     if query.count() == 0:
         logging.info(f"No local data found for {date}, lazy loading")
         data = get_from_url(table, date)
+        ThreadManager().start_loader(table, data)
         if data is None or len(data) == 0:
             return pd.DataFrame()
         else:
             return pd.DataFrame(data)
-        ThreadManager().start_loader(table, data)
         
     else:
         return pd.read_sql(query.statement, query.session.bind)
