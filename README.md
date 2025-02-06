@@ -14,6 +14,10 @@ This app is an attempt to migrate some of his images to a kubernetes cluster tha
 
 This web application runs on a kubernetes cluster hosted by Digital Ocean. It leverages three nodes in a worker pool to host the database and a python api. It uses lazy loading and a process server to pull the cassini images from his website and store them in a database spawned by the cluster. The application has a web interface at [http://cassini.scottswindell.net](http://cassini.scottswindell.net)
 
+## Pre-requisites and dependencies
+
+This application uses a few python libraries found in [tornado/requirements.txt](tornado/requirements.txt). 
+
 ## Postgres Database
 
 The database was built using the kubernetes manifest files found in the [databse](database) directory. [postgres-pvc.yaml](database/postgres-pvc.yaml) creates a persistent volume claim for the database. Appyling this file creates a digital ocean volume so the database can persist. The [postgres-statefulset.yaml](database/postgres-statefulset.yaml) file spawns a postgres database using the official postgres docker image and gives it access to the peristant volume. 
@@ -25,7 +29,7 @@ The python source code is found in the [tornado](tornado) directory. The python 
 
 ## Using the App
 
-Visit the app landing page [here](http://cassini.scottswindell.net). From there you can click the lazy loader to load images or see a list of the processes run previously. 
+Visit the app landing page [here](http://cassini.scottswindell.net). From there, you can click the lazy loader to load images or see a list of the processes run previously. 
 
 If you would like to go straight to the lazy loader, you can run it for any data by setting the GET data paramerter `date`. For example [http://cassini.scottswindell.net/lazyload?date=8-23-2024](http://cassini.scottswindell.net/lazyload?date=8-23-2024).
 

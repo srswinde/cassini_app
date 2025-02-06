@@ -16,4 +16,6 @@ def test_get_day_future_date():
         get_day(hole_camera, date=future_date)
 
 def test_example():
+    """Sanity check on the test suite
+    """
     assert 1 == 1
