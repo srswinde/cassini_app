@@ -18,10 +18,16 @@ class HelloWorldHandler(tornado.web.RequestHandler):
         <title>Cassini's Website</title>
         </head>
         <body>
-        <h1>Welcome to Cassini's Website</h1>
+        <h1>Welcome to Cassini's Lazy Loader</h1>
         Let's load a database the cassini way -- lazily.
+        <br>
         
-        <a href="/lazyload">Lazy Load</a>
+        <img src="https://swahle.org/cassini/hole-cam/static/2025/2/5/snapshot_1738786148.59658.jpg" height=300 width=400>
+        <br>
+        
+        <a href="/lazyload?date=08-23-2024">Lazy Load</a>
+        <br>
+        <a href="/process">Or see a list of the loading processes.</a>
         </body>
         </html>
         """
@@ -45,6 +51,9 @@ class LazyLoadHandler(tornado.web.RequestHandler):
         if date is None:
             date = "01-20-2025"
         data = get_day(hole_camera, date)
+        if data is None or data.empty:
+            self.write(f"No images available for this {date}")
+            return
         
         if 'hasTurtle' in data.columns:
             data['hasTurtle'] = data['hasTurtle'].apply(lambda x: x == HAS_TURTLE.YES)

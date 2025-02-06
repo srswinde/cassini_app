@@ -62,6 +62,27 @@ class ThreadManager(metaclass=Singleton):
 
 
 def get_day(table, date):
+    """Get cassini data from the database for a given date. If there is no data grab it from cassini's website and load it into the database.
+
+    Parameters
+    ----------
+    table : database.models.Base
+        table from the database ORM
+    date : datetime.datetime, str
+        date to query the database
+
+    Returns
+    -------
+    pd.DataFrame
+        data from the database for the given date in a pandas dataframe
+
+    Raises
+    ------
+    ValueError
+        when the date is in the future
+    ValueError
+        when the table is not found in the database_map
+    """
     
     database_map = {
         "hole_camera": hole_camera,
@@ -81,11 +102,15 @@ def get_day(table, date):
     next_midnight = midnight + datetime.timedelta(days=1)
     session = get_session()()
     query = session.query(table).filter(and_(table.timestamp >= midnight.timestamp()*1000, table.timestamp < next_midnight.timestamp()*1000))
+    # see if data is available on cloud database
     logging.info(f"Querying {table.__tablename__} for {date} found {query.count()} rows")
     if query.count() == 0:
+        #Nothitng found, try to load from cassini's website
         logging.info(f"No local data found for {date}, lazy loading")
         data = get_from_url(table, date)
+        # We have the data now load it into the database in the background
         ThreadManager().start_loader(table, data)
+        
         if data is None or len(data) == 0:
             return pd.DataFrame()
         else:
@@ -96,6 +121,25 @@ def get_day(table, date):
         
 
 def get_from_url(table, date):
+    """Get cassini images from his website.
+
+    Parameters
+    ----------
+    table : database.models.Base
+        table from the database ORM
+    date : datetime.datetime
+        date to query the database
+
+    Returns
+    -------
+    dict
+        data from the website as json converted to a dictionary
+
+    Raises
+    ------
+    Exception
+        when the response status code is not 200
+    """
     
     datestr = date.strftime("%m-%d-%Y")
     url = f"https://swahle.org/cassini/db/{table.__tablename__}/{datestr}"
