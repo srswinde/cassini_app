@@ -12,8 +12,20 @@ class HelloWorldHandler(tornado.web.RequestHandler):
     def get(self):
         
         logging.debug("accessing main!")
-        self.write("Hello, World!")
+        html = """
+        <html>
+        <head>
+        <title>Cassini's Website</title>
+        </head>
+        <body>
+        <h1>Welcome to Cassini's Website</h1>
+        Let's load a database the cassini way -- lazily.
         
+        <a href="/lazyload">Lazy Load</a>
+        </body>
+        </html>
+        """
+        self.write(html)
         
 class RecreateDatabaseHandler(tornado.web.RequestHandler):
     def get(self):
@@ -45,7 +57,13 @@ class LazyLoadHandler(tornado.web.RequestHandler):
         <title>Lazy Load</title>
         </head>
         <body>
-        <img src={url}>
+        <h1>Lazy Loading cassini's database</h1>
+        <img src={url} height=300 width=400>
+        <br>
+        <a href="https://github.com/srswinde/cassini_app">This project is hosted on github.</a>
+        </body>
+        </html>
+        
         """
         self.write(html)
     
