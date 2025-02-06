@@ -7,12 +7,12 @@ Cassini is a sulcata tortoise who lives in my backyard.
 
 There are many pictures of cassini floating around the internet. Mostly the ones I posted on his [website](https://swahle.org/cassini/detections.html?date=Wed%20Feb%2005%202025). That website is hosted on a bare metal linux server in a cabinet -- no way to run enterprise software. 
 
-This app is an attempt to migrate some of his website to a kubernetes cluster that is infintely scalable for cassini's user base. 
+This app is an attempt to migrate some of his images to a kubernetes cluster that is infintely scalable for cassini's user base.
 
 
 ## App Description
 
-This web application runs on a kubernetes cluster hosted by Digital Ocean. It leverages three nodes in a worker pool to host the database and the python api. It uses lazy loading and a process server to pull the cassini images from his website and store them in a database managed by a kubernetes cluster. The application has a web interface at [http://cassini.scottswindell.net](http://cassini.scottswindell.net)
+This web application runs on a kubernetes cluster hosted by Digital Ocean. It leverages three nodes in a worker pool to host the database and a python api. It uses lazy loading and a process server to pull the cassini images from his website and store them in a database managed by a kubernetes cluster. The application has a web interface at [http://cassini.scottswindell.net](http://cassini.scottswindell.net)
 
 ## Postgres Database
 
@@ -22,3 +22,7 @@ The database was built using the kubernetes manifest files found in the [databse
 ## Python API
 
 The python interface to the database and web server source code is found in the [tornado](tornado) directory. 
+
+## Using the App
+
+Visit the app landing page [here](http://cassini.scottswindell.net). 
