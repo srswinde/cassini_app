@@ -21,7 +21,7 @@ The database was built using the kubernetes manifest files found in the [databse
 
 ## Python Server and database interface
 
-The python source code is found in the [tornado](tornado) directory. The python source is split into two python packages, the [database](tornado/database) package and the api package [tornado/api](tornado/api). The database package contins the sqlalchemy models and the api package contains the tornado web request handlers and a process server to handle the lazy loading of images from cassini's website into the cloud database. 
+The python source code is found in the [tornado](tornado) directory. The python source is split into two python packages, the [tornado/database](tornado/database) package and the api package [tornado/api](tornado/api). The database package contins the sqlalchemy models and the api package contains the tornado web request handlers and a process server to handle the lazy loading of images from cassini's website.
 
 ## Using the App
 

@@ -3,10 +3,11 @@ from datetime import datetime, timedelta
 from api.process_loaders import get_day
 from database.models import hole_camera
 
-# Replace ThisException with the actual exception type you expect
-EXPECTED_EXCEPTION = ValueError  # Example exception type
+EXPECTED_EXCEPTION = ValueError 
 
 def test_get_day_future_date():
+    """Test that get_day raises an exception when the date is in the future.
+    """
     # Create a date that is in the futurecd 
     future_date = datetime.now() + timedelta(days=1)
 
