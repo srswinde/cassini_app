@@ -16,7 +16,7 @@ This web application runs on a kubernetes cluster hosted by Digital Ocean. It le
 
 ## Postgres Database
 
-The database was built using the kubernetes manifest files found in the [databse](database) directory. [postgres-pvc.yaml](database/postgres-pvc.yaml) creates a persistent volume claim for the database. Appyling this file creates a digital ocean volume so the database can persist. The [postgres-statefulset.yaml](database/postgres-statefulset.yaml) file spawns a postgres database using the official postgres docker image and gives it access to the peristnat volume. 
+The database was built using the kubernetes manifest files found in the [databse](database) directory. [postgres-pvc.yaml](database/postgres-pvc.yaml) creates a persistent volume claim for the database. Appyling this file creates a digital ocean volume so the database can persist. The [postgres-statefulset.yaml](database/postgres-statefulset.yaml) file spawns a postgres database using the official postgres docker image and gives it access to the peristant volume. 
 
 
 ## Python Server and database interface
