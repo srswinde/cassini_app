@@ -59,7 +59,39 @@ class ThreadManager(metaclass=Singleton):
             thread.join()
     
     
-
+def remove_day(table, date):
+    
+    """Remove cassini data from the database for a given date.
+    """
+    
+    if type(date) == str:
+        date = parse(date)
+        
+    midnight = date.replace(hour=0, minute=0, second=0, microsecond=0)
+    next_midnight = midnight + datetime.timedelta(days=1)
+    session = get_session()()
+    query = session.query(table).filter(and_(table.timestamp >= midnight.timestamp()*1000, table.timestamp < next_midnight.timestamp()*1000))
+    logging.info(f"Removing {table.__tablename__} for {date} found {query.count()} rows")
+    query.delete()
+    session.commit()
+    session.close()
+    
+def update_day(table, date, key, value):
+    """Update cassini data from the database for a given date.
+    """
+    
+    if type(date) == str:
+        date = parse(date)
+        
+    midnight = date.replace(hour=0, minute=0, second=0, microsecond=0)
+    next_midnight = midnight + datetime.timedelta(days=1)
+    session = get_session()()
+    query = session.query(table).filter(and_(table.timestamp >= midnight.timestamp()*1000, table.timestamp < next_midnight.timestamp()*1000))
+    logging.info(f"Updating {table.__tablename__} for {date} found {query.count()} rows")
+    query.update({key: value})
+    session.commit()
+    session.close()
+    
 
 def get_day(table, date):
     """Get cassini data from the database for a given date. If there is no data grab it from cassini's website and load it into the database.
