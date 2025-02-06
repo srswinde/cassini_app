@@ -3,7 +3,7 @@
 ## Cassini
 Cassini is a sulcata tortoise who lives in my backyard. 
 
-[Cassini](cassini.jpg)
+![Cassini](cassini.jpg)
 
 A camera on Cassini’s burrow takes images every minute that post to his [website](https://swahle.org/cassini/detections.html?date=Wed%20Feb%2005%202025). An AI model has been trained to detect Cassini so that his activity can be monitored and we can be alerted when he is out and about and looking for treats. That website is hosted on a bare metal linux server in a cabinet (no way to run enterprise software). 
 
