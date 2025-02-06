@@ -188,6 +188,8 @@ class cassini_orientation(Base):
     orientation = Column(Integer)
 
 class Loader:
+    """A class to load data into the database
+    """
     
     def __init__(self, table, data):
         
@@ -195,6 +197,9 @@ class Loader:
         self.data = data
 
     def load(self):
+        """Load data into the database
+        The method blocks until the data is loaded into the database. 
+        """
         
         session = get_session()()
         db_process_ = db_process()
