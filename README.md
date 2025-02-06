@@ -16,7 +16,7 @@ This web application runs on a kubernetes cluster hosted by Digital Ocean. It le
 
 ## Pre-requisites and dependencies
 
-This application uses a few python libraries found in [tornado/requirements.txt](tornado/requirements.txt). 
+This application uses a few python libraries found in [tornado/requirements.txt](tornado/requirements.txt). Web requests are handled by a tornado web server and the database is accessed using sqlalchemy. 
 
 ## Postgres Database
 
